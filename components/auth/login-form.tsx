@@ -3,6 +3,7 @@ import * as z from 'zod'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSearchParams } from 'next/navigation'
 import { CardWrapper } from './card-wrapper'
 import { LoginSchema } from '@/schemas'
 import {
@@ -18,10 +19,19 @@ import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
 import { login } from '@/actions/login'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams()
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Email already in use with different provider!'
+      : ''
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
+
+  const [showPassword, setShowPassword] = useState(false)
+  
   const [isPending, startTransition] = useTransition()
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -36,10 +46,13 @@ export const LoginForm = () => {
     setSuccess('')
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error)
-        setSuccess(data.success)
+        setError(data?.error)
+        // setSuccess(data.success)
       })
     })
+  }
+  const toggleShowPassword = () => {
+    setShowPassword((value) => !value)
   }
 
   return (
@@ -77,19 +90,27 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="********"
-                      type="password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="********"
+                        type={showPassword ? 'text' : 'password'}
+                      />
+                      <div
+                        className="absolute right-[3%] bottom-[25%]"
+                        onClick={toggleShowPassword}
+                      >
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                      </div>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="w-full">
             Login

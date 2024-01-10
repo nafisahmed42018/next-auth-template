@@ -18,10 +18,13 @@ import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
 import { register } from '@/actions/register'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
+  const [showPassword, setShowPassword] = useState(false)
+
   const [isPending, startTransition] = useTransition()
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -41,6 +44,10 @@ export const RegisterForm = () => {
         setSuccess(data.success)
       })
     })
+  }
+
+  const toggleShowPassword = () => {
+    setShowPassword((value) => !value)
   }
 
   return (
@@ -96,12 +103,20 @@ export const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="********"
-                      type="password"
-                    />
+                    <div className="relative ">
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="********"
+                        type={showPassword ? 'text' : 'password'}
+                      />
+                      <div
+                        className="absolute right-[3%] bottom-[25%]"
+                        onClick={toggleShowPassword}
+                      >
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                      </div>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
