@@ -27,27 +27,48 @@ Using react-form-hook created the form fields and validated the form elements wi
 Install prisma and prisma client and create db in lib.
 
 Setup .env file with database url and prisma.schema with the provider information. Create schemas for different models.
+
 Then push the database. Install prisma adapter from auth.js. Create the schema generate it and push it
 
 ###
 
-Install bcrypt to hash the password
+Install bcrypt to hash the password during registeration.
+
+Follow this [link](https://authjs.dev/guides/upgrade-to-v5?authentication-method=middleware) here to setup auth, middleware, routes
+
 
 ### terminal
 
 npx create-next-app@latest
+
 npx shadcn-ui@latest init
+
 npx shadcn-ui@latest button
+
 npx shadcn-ui@latest card
+
 npm i react-icons
+
 npx shadcn-ui@latest form
+
 npx shadcn-ui@latest input
+
 npm i -D prisma
+
 npm i @prisma/client
+
 npx prisma init
+
 npx prisma generate
+
 npx prisma db push
+
 npm i @auth/prisma-adapter
+
 npx prisma generate
+
 npx prisma db push
+
 npm install next-auth@beta
+
+npm i @auth/prisma-adapter
