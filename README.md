@@ -30,12 +30,16 @@ Setup .env file with database url and prisma.schema with the provider informatio
 
 Then push the database. Install prisma adapter from auth.js. Create the schema generate it and push it
 
-###
+### Authentication
 
 Install bcrypt to hash the password during registeration.
 
 Follow this [link](https://authjs.dev/guides/upgrade-to-v5?authentication-method=middleware) here to setup auth, middleware, routes
 
+
+### Callbacks
+
+modifying the session and token through auth callbacks inside of auth. Add roles for the user
 
 ### terminal
 
@@ -72,3 +76,9 @@ npx prisma db push
 npm install next-auth@beta
 
 npm i @auth/prisma-adapter
+
+npx prisma generate
+
+npx prisma migrate reset
+
+npx prisma db push
