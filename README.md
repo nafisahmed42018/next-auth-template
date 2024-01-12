@@ -82,3 +82,9 @@ npx prisma generate
 npx prisma migrate reset
 
 npx prisma db push
+
+npm i uuid
+
+npm i --save-dev @types/uuid
+
+npm i react-spinners

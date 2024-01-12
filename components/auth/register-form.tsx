@@ -1,10 +1,10 @@
 'use client'
 import * as z from 'zod'
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CardWrapper } from './card-wrapper'
-import { LoginSchema, RegisterSchema } from '@/schemas'
+import { RegisterSchema } from '@/schemas'
 import {
   Form,
   FormControl,
@@ -21,19 +21,38 @@ import { register } from '@/actions/register'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export const RegisterForm = () => {
+
   const [error, setError] = useState<string | undefined>('')
   const [success, setSuccess] = useState<string | undefined>('')
+
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const [isPending, startTransition] = useTransition()
+  
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: '',
-      password: '',
       name: '',
+      password: '',
+      confirmPassword: '',
     },
   })
+
+  const password = form.watch('password', '')
+  const confirmPassword = form.watch('confirmPassword', '')
+
+  useEffect(() => {
+    if (password !== '' && confirmPassword !== '') {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match')
+      }
+    }
+    return () => {
+      setError('')
+    }
+  }, [password, confirmPassword])
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError('')
@@ -46,6 +65,9 @@ export const RegisterForm = () => {
     })
   }
 
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword((value) => !value)
+  }
   const toggleShowPassword = () => {
     setShowPassword((value) => !value)
   }
@@ -122,7 +144,34 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <div className="relative ">
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="********"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                      />
+                      <div
+                        className="absolute right-[3%] bottom-[25%]"
+                        onClick={toggleShowConfirmPassword}
+                      >
+                        {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="w-full">
