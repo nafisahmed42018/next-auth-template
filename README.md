@@ -71,7 +71,7 @@ npm i @auth/prisma-adapter
 npx prisma generate
 
 npx prisma db push
-
+ 
 npm install next-auth@beta
 
 npm i @auth/prisma-adapter
