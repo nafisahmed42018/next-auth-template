@@ -36,7 +36,6 @@ Install bcrypt to hash the password during registeration.
 
 Follow this [link](https://authjs.dev/guides/upgrade-to-v5?authentication-method=middleware) here to setup auth, middleware, routes
 
-
 ### Callbacks
 
 modifying the session and token through auth callbacks inside of auth. Add roles for the user
@@ -88,3 +87,9 @@ npm i uuid
 npm i --save-dev @types/uuid
 
 npm i react-spinners
+
+npx prisma generate
+
+npx prisma migrate reset
+
+npx prisma db push

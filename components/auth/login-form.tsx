@@ -20,6 +20,7 @@ import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
 import { login } from '@/actions/login'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import Link from 'next/link'
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()
@@ -31,7 +32,7 @@ export const LoginForm = () => {
   const [success, setSuccess] = useState<string | undefined>('')
 
   const [showPassword, setShowPassword] = useState(false)
-  
+
   const [isPending, startTransition] = useTransition()
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -105,6 +106,14 @@ export const LoginForm = () => {
                       </div>
                     </div>
                   </FormControl>
+                  <Button
+                    size={`sm`}
+                    variant={`link`}
+                    asChild
+                    className="px-0 font-normal"
+                  >
+                    <Link href="/auth/reset">Forgot password?</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
